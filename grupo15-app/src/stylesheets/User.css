@@ -1,0 +1,9 @@
+.user-container {
+    background-color: #58d68d;
+    width: 60%;
+    border-style: solid;
+    border: 0.5px solid #ff5733;
+    align-self: flex-end;   /* Alinea a la derecha */
+    border-radius: 10px;      /* Esquinas redondeadas */
+    padding: 20px;            /* Espaciado interno para separar el contenido del borde */
+}
