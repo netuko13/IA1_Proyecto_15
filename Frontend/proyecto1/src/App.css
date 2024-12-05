@@ -8,7 +8,7 @@
   padding: 20px;
   background: linear-gradient(145deg, #1b2838, #0f1a25);
   font-family: 'Arial', sans-serif;
-  color: #d1d4db;
+  color: #000000;
   box-sizing: border-box; /* Incluye padding en el tamaño total */
 }
 
@@ -39,37 +39,38 @@
   gap: 10px;
 }
 
+/* Estilo para alinear preguntas y respuestas */
 .message-section {
+  display: flex;
+  align-items: center;
+  margin: 10px;
   padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  border: 1px solid transparent;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.2s, border-color 0.2s;
-  margin-bottom: 10px; /* Separación entre mensajes */
+  max-width: 70%;
+  word-wrap: break-word;
 }
 
 .question {
-  background-color: #243b55;
-  border-color: #66c0f4;
+  background-color: #89c3f7; /* Color de fondo para preguntas */
+  margin-left: auto; /* Empuja la pregunta hacia la derecha */
+  text-align: right; /* Alinea el texto a la derecha */
 }
 
 .response {
-  background-color: #2f455c;
-  border-color: #8fbc8f;
+  background-color: #61f061; /* Color de fondo para respuestas */
+  margin-right: auto; /* Empuja la respuesta hacia la izquierda */
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.copy-icon {
+  cursor: pointer;
+  margin-left: 10px;
 }
 
 .message-section p {
   white-space: pre-wrap;
   margin: 0;
-}
-
-/* Icono de copiar */
-.copy-icon {
-  cursor: pointer;
-  color: #66c0f4;
-  font-size: 18px;
-  transition: color 0.2s;
-  margin-left: 10px;
 }
 
 .copy-icon:hover {
