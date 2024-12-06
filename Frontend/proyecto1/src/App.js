@@ -1,43 +1,37 @@
-import React, { useState } from 'react'; 
-import { FaRegCopy } from 'react-icons/fa'; 
-import './App.css'; 
+import React, { useState } from 'react';
+import { FaRegCopy } from 'react-icons/fa';
+import './App.css'; // Importamos el archivo de estilos
 
-// Definimos un componente funcional llamado ChatApp.
 const ChatApp = () => {
-  
-  // Declaramos un estado para manejar el valor del input (pregunta que el usuario escribe).
-  const [inputValue, setInputValue] = useState(''); 
-  // Declaramos un estado para almacenar el historial de preguntas y respuestas.
-  const [chatHistory, setChatHistory] = useState([]); 
-  // Creamos un array con respuestas predefinidas que se seleccionarán aleatoriamente.
-  const defaultResponses = ['Hola', '¿Cómo estás?', 'Bienvenido']; 
-  
-  // Función que se ejecuta al enviar un mensaje.
+  const [inputValue, setInputValue] = useState('');
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isTyping, setIsTyping] = useState(false); // Nuevo estado para controlar el indicador de escritura
+
+  const defaultResponses = ['Hola', '¿Cómo estás?', 'Bienvenido'];
+
   const handleSendMessage = () => {
-    // Si el input está vacío o tiene solo espacios, no hacemos nada.
-    if (inputValue.trim() === '') return; 
-    
-    // Seleccionamos una respuesta aleatoria del array `defaultResponses`.
+    if (inputValue.trim() === '') return;
+
+    setIsTyping(true); // Activamos el estado de "IA escribiendo"
+
     const randomResponse =
-      defaultResponses[Math.floor(Math.random() * defaultResponses.length)]; 
-    
-    // Actualizamos el historial del chat agregando la pregunta del usuario y la respuesta generada.
-    setChatHistory([
-      ...chatHistory, 
-      { question: inputValue, response: randomResponse }
-    ]); 
-    
-    // Limpiamos el input después de enviar el mensaje.
-    setInputValue(''); 
+      defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+
+    setTimeout(() => {
+      // Simulamos un retraso en la respuesta de la IA
+      setChatHistory([
+        ...chatHistory,
+        { question: inputValue, response: randomResponse },
+      ]);
+      setInputValue('');
+      setIsTyping(false); // Desactivamos el estado de "IA escribiendo"
+    }, 1500); // Tiempo de retraso en milisegundos (1.5 segundos)
   };
 
-  // Función para copiar texto al portapapeles.
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(
-      () => alert('¡Texto copiado al portapapeles!'), 
-      // Mostramos un mensaje de éxito si la copia fue exitosa.
-      () => alert('Error al copiar el texto.') 
-      // Mostramos un mensaje de error si no se pudo copiar.
+      () => alert('¡Texto copiado al portapapeles!'),
+      () => alert('Error al copiar el texto.')
     );
   };
 
@@ -46,35 +40,38 @@ const ChatApp = () => {
       <h2 className="chat-title">IA</h2>
       <div className="chat-history">
         {chatHistory.map((item, index) => (
-          // Recorremos el historial de chat para renderizar cada pregunta y respuesta.
           <div key={index} className="chat-message">
             <div className="message-section question">
-              {/* Sección que muestra la pregunta del usuario */}
-              <p><strong>Usuario:</strong> <p>{item.question}</p></p>
-              <FaRegCopy 
-                onClick={() => copyToClipboard(item.question)} 
-                className="copy-icon" 
+              <p>
+                <strong>Pregunta:</strong> <p>{item.question}</p>
+              </p>
+              <FaRegCopy
+                onClick={() => copyToClipboard(item.question)}
+                className="copy-icon"
               />
             </div>
             <div className="message-section response">
-              {/* Sección que muestra la respuesta*/}
-              <p><strong>IA:</strong> <p>{item.response}</p></p>
-              <FaRegCopy 
-                onClick={() => copyToClipboard(item.response)} 
-                className="copy-icon" 
+              <p>
+                <strong>Respuesta:</strong> <p>{item.response}</p>
+              </p>
+              <FaRegCopy
+                onClick={() => copyToClipboard(item.response)}
+                className="copy-icon"
               />
             </div>
           </div>
         ))}
+        {isTyping && (
+          <div className="typing-indicator">
+            {/* Indicador de "IA escribiendo" */}
+            <p>IA escribiendo...</p>
+          </div>
+        )}
       </div>
-
       <div className="chat-input-container">
-        {/* Contenedor para el input de texto y el botón de enviar */}
         <textarea
-          value={inputValue} 
-          // Conectamos el valor del input al estado `inputValue`.
-          onChange={(e) => setInputValue(e.target.value)} 
-          // Actualizamos el estado `inputValue` cada vez que el usuario escribe algo.
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           placeholder="Escribe tu pregunta..."
           className="chat-input"
         />
