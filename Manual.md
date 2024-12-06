@@ -13,3 +13,9 @@ Estilos de la libreria
 ```
 npm install @chatscope/chat-ui-kit-styles
 ```
+
+## Refrencias 
+
+```
+https://chatscope.io/storybook/react/?path=/docs/components-chatcontainer--docs
+```
