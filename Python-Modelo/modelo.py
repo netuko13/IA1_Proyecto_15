@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 # Cargar el archivo de la informacion.
-df = pd.read_csv('./data/spa.csv', sep='\t', header=None, usecols=[0, 1], names=['input', 'target'])
+df = pd.read_csv('./data/spa.txt', sep='\t', header=None, usecols=[0, 1], names=['input', 'target'])
 
 # Preprocesar los textos para convertir a minusculas y estar estandarizado.
 def preprocess_text(text):
