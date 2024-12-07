@@ -66,5 +66,9 @@ model.summary()
 # Empezamos el entrenamiento.
 model.fit([encoder_input_data, decoder_input_data], decoder_target_data, epochs=10, batch_size=64)
 
-# Se guardar el modelo para ya utilizarlo con javascript.
+# Se guardar el modelo para despues convertirlo ya utilizarlo con javascript.
 model.save('seq2seq_model')
+
+# Con bash se convierte y el web_model ya se utiliza con react.
+# tensorflowjs_converter --input_format keras ./seq2seq_model ./web_model
+
