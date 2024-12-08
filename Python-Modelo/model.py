@@ -150,6 +150,8 @@ model.fit([encoder_inputs_train, decoder_inputs_train], decoder_targets_train,
 
 # Guardar el modelo entrenado
 model.save("seq2seq_chatbot.keras")
+model.save("seq2seq_chatbot.h5")
+tf.saved_model.save(model, './')
 print("Modelo guardado como seq2seq_chatbot.keras")
 
 # Convertirlo con tensorflow (keras)
