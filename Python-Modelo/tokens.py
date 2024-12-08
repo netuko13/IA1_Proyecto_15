@@ -21,7 +21,7 @@ data['target'] = data['target'].astype(str)
 data['target'] = data['target'].apply(lambda x: 'sos ' + x + ' eos')
 
 # Verificar que los tokens se agregaron correctamente
-print("\nDatos después de agregar tokens <start> y <end>:")
+print("\nDatos después de agregar tokens <sos> y <eos>:")
 print(data.head())
 
 # ---------- Tokenizers para Entrada y Salida ----------

@@ -44,17 +44,16 @@ function App() {
 
   // Función para convertir texto a secuencia de tokens
   const textToSequence = (text, tokenizer, maxLen = 10) => {
-    // Convertir texto a tokens usando el tokenizer
     const tokens = text
       .toLowerCase()
       .split(" ")
       .map((word) => tokenizer[word] || tokenizer["<unk>"]); // Token desconocido
-  
-    // Padding: Agregar ceros al final hasta que alcance maxLen
+    
+    // Agregar padding (ceros) hasta maxLen
     while (tokens.length < maxLen) {
       tokens.push(0);
     }
-  
+
     // Truncar si excede maxLen
     return tokens.slice(0, maxLen);
   };
@@ -75,31 +74,44 @@ function App() {
       alert("Modelo o tokenizers no cargados todavía.");
       return;
     }
-  
+
     // Entrada: tokens de la frase input
     const inputTokens = textToSequence(inputSequence, tokenizerInput, 10); // Longitud 10
-  
-    // Target: Inicia con el token especial '<start>'
-    const startToken = tokenizerTarget["<start>"] || 1; // Valor por defecto si no existe <start>
-    let targetTokens = [startToken];
-  
-    // Asegurarnos de que la secuencia de salida tenga longitud 10
+    
+    // Target: Inicia con el token especial '<sos>'
+    const sosToken = tokenizerTarget["<sos>"] || 1;  // Token "sos"
+    const eosToken = tokenizerTarget["<eos>"] || 2;  // Token "eos"
+    let targetTokens = [sosToken];
+
+    // Convertir la entrada a tokens y agregarlos a la secuencia target
+    const inputTokensTarget = inputSequence
+      .toLowerCase()
+      .split(" ")
+      .map((word) => tokenizerTarget[word] || tokenizerTarget["<unk>"]);
+
+    // Concatenar la secuencia de entrada (con tokens)
+    targetTokens = [...targetTokens, ...inputTokensTarget];
+
+    // Asegurarnos de que la secuencia de salida tenga longitud 10, agregar el token <eos>
+    targetTokens.push(eosToken); // Añadir <eos> al final
+
     while (targetTokens.length < 10) {
       targetTokens.push(0);  // Padding hasta longitud 10
     }
-  
+
     console.log("Secuencia de entrada:", inputTokens);
     console.log("Secuencia target ajustada:", targetTokens);
-  
-    // Crear tensores con la forma correcta
+
+    // Crear tensores para ambas entradas
     const inputTensor = tf.tensor2d([inputTokens], [1, 10]);  // Entrada [1, 10]
     const targetTensor = tf.tensor2d([targetTokens], [1, 10]);  // Salida [1, 10]
-  
+
     // Pasar ambos tensores como entrada al modelo
     const predictionTensor = model.predict([inputTensor, targetTensor]);
   
-    // Obtener predicción
+    // Obtener la predicción
     const predictedIndices = predictionTensor.argMax(-1).dataSync();
+    console.log("Resultado:" + Array.from(predictedIndices));
     const predictedText = sequenceToText(Array.from(predictedIndices), tokenizerTarget);
   
     setPrediction(predictedText);
