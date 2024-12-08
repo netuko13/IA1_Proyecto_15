@@ -1,137 +1,183 @@
-import React, { useEffect, useState } from "react";
-import * as tf from "@tensorflow/tfjs";
+import React, { useEffect, useState } from 'react';
+import { FaRegCopy } from 'react-icons/fa';
+import './App.css'; // Importamos el archivo de estilos
+import * as tf from '@tensorflow/tfjs';
 
-function App() {
-  const [tokenizerInput, setTokenizerInput] = useState({});
-  const [tokenizerTarget, setTokenizerTarget] = useState({});
+const ChatApp = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isTyping, setIsTyping] = useState(false); // Nuevo estado para controlar el indicador de escritura
+
+  //Cargamos el modelo
   const [model, setModel] = useState(null);
-  const [inputSequence, setInputSequence] = useState("");
-  const [prediction, setPrediction] = useState("");
+  const [inputTokenizer, setInputTokenizer] = useState(null);
+  const [response, setResponse] = useState('');
+  const [targetTokenizer, setTargetTokenizer] = useState(null);
+  const [loading, setLoading] = useState(false); // Estado para "IA escribiendo..."
 
-  // Función para cargar los tokenizers
-  const loadTokenizers = async () => {
-    try {
-      const inputRes = await fetch("/tokenizer_input.json");
-      const targetRes = await fetch("/tokenizer_target.json");
-      const inputTokenizer = await inputRes.json();
-      const targetTokenizer = await targetRes.json();
 
-      setTokenizerInput(inputTokenizer);
-      setTokenizerTarget(targetTokenizer);
+  const defaultResponses = ['Hola', '¿Cómo estás?', 'Bienvenido'];
 
-      console.log("Tokenizers cargados.");
-    } catch (error) {
-      console.error("Error al cargar los tokenizers:", error);
-    }
-  };
-
-  // Función para cargar el modelo de TensorFlow.js
-  const loadModel = async () => {
-    try {
-      const loadedModel = await tf.loadLayersModel("/model/model.json");
-      setModel(loadedModel);
-      console.log("Modelo cargado correctamente.");
-    } catch (error) {
-      console.error("Error al cargar el modelo:", error);
-    }
-  };
-
-  // Cargar tokenizers y modelo cuando el componente se monta
+  // Cargar el modelo al montar el componente
   useEffect(() => {
-    loadTokenizers();
+    const loadModel = async () => {
+      try {
+        const loadedModel = await tf.loadLayersModel('./model/model.json');
+        setModel(loadedModel);
+        console.log('Modelo cargado exitosamente: ');
+      } catch (error) {
+        console.error('Error al cargar el modelo:', error);
+      }
+    };
     loadModel();
   }, []);
 
-  // Función para convertir texto a secuencia de tokens
-  const textToSequence = (text, tokenizer, maxLen = 10) => {
-    // Convertir texto a tokens usando el tokenizer
-    const tokens = text
-      .toLowerCase()
-      .split(" ")
-      .map((word) => tokenizer[word] || tokenizer["<unk>"]); // Token desconocido
-  
-    // Padding: Agregar ceros al final hasta que alcance maxLen
-    while (tokens.length < maxLen) {
-      tokens.push(0);
+  // Tokenizer simulado para este ejemplo
+  const tokenizer = {
+    word_index: {
+      'sos': 1,
+      'eos': 2,
+      'hello': 3,
+      'hi': 4
+      // Agrega las demás palabras de tu tokenizador aquí
+    },
+    index_word: {
+      1: 'sos',
+      2: 'eos',
+      3: 'hello',
+      4: 'hi'
+      // Agrega las demás palabras de tu tokenizador aquí
+    },
+    texts_to_sequences: (texts) => {
+      return texts.map(text => {
+        return text.split(' ').map(word => this.word_index[word] || 0); // 0 es el valor para palabras desconocidas
+      });
     }
-  
-    // Truncar si excede maxLen
-    return tokens.slice(0, maxLen);
   };
 
-  // Función para convertir secuencia de tokens a palabras
-  const sequenceToText = (sequence, tokenizer) => {
-    const invertedTokenizer = {};
-    Object.keys(tokenizer).forEach((word) => {
-      invertedTokenizer[tokenizer[word]] = word;
-    });
-
-    return sequence.map((token) => invertedTokenizer[token] || "<unk>").join(" ");
-  };
-
-  // Función para predecir usando el modelo
-  const predict = async () => {
-    if (!model || Object.keys(tokenizerInput).length === 0) {
-      alert("Modelo o tokenizers no cargados todavía.");
+  // Función para generar la respuesta del chatbot
+  const generateResponse = async (inputSeq) => {
+    if (!model) {
+      setResponse("Cargando el modelo...");
       return;
     }
-  
-    // Entrada: tokens de la frase input
-    const inputTokens = textToSequence(inputSequence, tokenizerInput, 10); // Longitud 10
-  
-    // Target: Inicia con el token especial '<start>'
-    const startToken = tokenizerTarget["<start>"] || 1; // Valor por defecto si no existe <start>
-    let targetTokens = [startToken];
-  
-    // Asegurarnos de que la secuencia de salida tenga longitud 10
-    while (targetTokens.length < 10) {
-      targetTokens.push(0);  // Padding hasta longitud 10
+
+    // Asegurarse de que el modelo esté cargado
+    setLoading(true);
+
+    try {
+      // Codificar la entrada para obtener los estados del encoder
+      const encoderModel = model.getLayer('encoder_model');
+      const encoderInputTensor = tf.tensor(inputSeq);
+      const statesValue = await encoderModel.predict(encoderInputTensor).array();
+
+      // Inicializar la secuencia objetivo con el token de inicio (SOS)
+      let targetSeq = [tokenizer.word_index['sos']];
+      let response = [];
+      let stopCondition = false;
+
+      // Generar la respuesta palabra por palabra
+      while (!stopCondition) {
+        // Predecir con el modelo decoder
+        const decoderModel = model.getLayer('decoder_model');
+        const output = await decoderModel.predict([tf.tensor([targetSeq]), ...statesValue]).array();
+
+        // Obtener el índice del token de la distribución de salida
+        const sampledTokenIndex = output[0][0];
+
+        // Obtener la palabra correspondiente
+        const sampledToken = tokenizer.index_word[sampledTokenIndex] || '.';
+
+        // Agregar la palabra a la respuesta
+        response.push(sampledToken);
+
+        // Condición de salida: token de fin de secuencia o longitud máxima
+        if (sampledToken === 'eos' || response.length > 30) { // Ajusta el max length si es necesario
+          stopCondition = true;
+        }
+
+        // Actualizar la secuencia objetivo con el token muestreado
+        targetSeq = [sampledTokenIndex];
+
+        // Actualizar los estados del decoder
+        statesValue = output.slice(1);
+      }
+
+      setResponse(response.join(' '));
+
+    } catch (error) {
+      console.error("Error al generar la respuesta:", error);
+      setResponse("Error al generar respuesta");
     }
-  
-    console.log("Secuencia de entrada:", inputTokens);
-    console.log("Secuencia target ajustada:", targetTokens);
-  
-    // Crear tensores con la forma correcta
-    const inputTensor = tf.tensor2d([inputTokens], [1, 10]);  // Entrada [1, 10]
-    const targetTensor = tf.tensor2d([targetTokens], [1, 10]);  // Salida [1, 10]
-  
-    // Pasar ambos tensores como entrada al modelo
-    const predictionTensor = model.predict([inputTensor, targetTensor]);
-  
-    // Obtener predicción
-    const predictedIndices = predictionTensor.argMax(-1).dataSync();
-    const predictedText = sequenceToText(Array.from(predictedIndices), tokenizerTarget);
-  
-    setPrediction(predictedText);
-    console.log("Predicción:", predictedText);
+
+    setLoading(false);
+  };
+
+  const handleSendMessage = async () => {
+    if (inputValue.trim() === '') return;
+
+    setLoading(true); // Muestra "IA escribiendo..."
+    const response = await generateResponse(inputValue); // Genera respuesta del modelo
+    setLoading(false);
+
+    // Actualiza el historial del chat
+    setChatHistory([...chatHistory, { question: inputValue, response }]);
+    setInputValue('');
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(
+      () => alert('¡Texto copiado al portapapeles!'),
+      () => alert('Error al copiar el texto.')
+    );
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Demo de Tokenizers y Modelo TensorFlow.js</h1>
-
-      <div>
-        <label>Escribe tu texto de entrada:</label>
-        <input
-          type="text"
-          value={inputSequence}
-          onChange={(e) => setInputSequence(e.target.value)}
-          placeholder="Escribe algo aquí..."
-          style={{ width: "100%", margin: "10px 0", padding: "10px" }}
+    <div className="chat-container">
+      <h2 className="chat-title">IA</h2>
+      <div className="chat-history">
+        {chatHistory.map((item, index) => (
+          <div key={index} className="chat-message">
+            <div className="message-section question">
+              <p>
+                <strong>Pregunta:</strong> <p>{item.question}</p>
+              </p>
+              <FaRegCopy
+                onClick={() => copyToClipboard(item.question)}
+                className="copy-icon"
+              />
+            </div>
+            <div className="message-section response">
+              <p>
+                <strong>Respuesta:</strong> <p>{item.response}</p>
+              </p>
+              <FaRegCopy
+                onClick={() => copyToClipboard(item.response)}
+                className="copy-icon"
+              />
+            </div>
+          </div>
+        ))}
+        {isTyping && (
+          <div className="typing-indicator">
+            {/* Indicador de "IA escribiendo" */}
+            <p>IA escribiendo...</p>
+          </div>
+        )}
+      </div>
+      <div className="chat-input-container">
+        <textarea
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Escribe tu pregunta..."
+          className="chat-input"
         />
-        <button onClick={predict} style={{ padding: "10px", cursor: "pointer" }}>
-          Predecir
+        <button onClick={handleSendMessage} className="send-button">
+          Enviar
         </button>
       </div>
-
-      {prediction && (
-        <div>
-          <h2>Predicción:</h2>
-          <p>{prediction}</p>
-        </div>
-      )}
     </div>
   );
-}
+};
 
-export default App;
+export default ChatApp;
