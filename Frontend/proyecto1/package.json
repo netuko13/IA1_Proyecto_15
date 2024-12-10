@@ -1,7 +1,7 @@
 {
   "name": "proyecto1",
   "version": "0.1.0",
-  "homepage": "https://CarlosV951.github.io/IA1_Proyecto_15",
+  "homepage": "https://netuko13.github.io/IA1_Proyecto_15",
   "private": true,
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
