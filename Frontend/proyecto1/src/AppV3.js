@@ -14,8 +14,10 @@ function App() {
   // Función para cargar los tokenizers
   const loadTokenizers = async () => {
     try {
-      const inputRes = await fetch("/tokenizer_encoder_decoder.json");
-      const targetRes = await fetch("/tokenizer_encoder_decoder.json");
+      //Process.env.PUBLIC_URL se asegura de que la ruta sea válida tanto en desarrollo como en producción.
+      const home = process.env.PUBLIC_URL
+      const inputRes = await fetch(home + "/tokenizer_encoder_decoder.json");
+      const targetRes = await fetch(home + "/tokenizer_encoder_decoder.json");
       const inputTokenizer = await inputRes.json();
       const targetTokenizer = await targetRes.json();
 
@@ -31,8 +33,8 @@ function App() {
   // Función para cargar el modelo del encoder y decoder
   const loadModels = async () => {
     try {
-      const encoder = await tf.loadLayersModel("/encoder_model/model.json");
-      const decoder = await tf.loadLayersModel("/decoder_model/model.json");
+      const encoder = await tf.loadLayersModel(home + "/encoder_model/model.json");
+      const decoder = await tf.loadLayersModel(home + "/decoder_model/model.json");
 
       setEncoderModel(encoder);
       setDecoderModel(decoder);
@@ -99,7 +101,7 @@ function App() {
       const stateHTensor = stateH;
       const stateCTensor = stateC;
 
-      
+
       // Predicción del decoder
       const [outputTokens, updatedH, updatedC] = decoderModel.predict([
         targetSeqTensor, // Entrada del token actual
@@ -109,22 +111,22 @@ function App() {
 
       // Sample a token from the output distribution
       const sample_token_index = outputTokens.argMax(-1).dataSync()[0];
-    
+
       // Obtén el índice del token predicho
       const predictedIndex = outputTokens.argMax(-1).dataSync()[0];
       const predictedWord = sequenceToText([sample_token_index], tokenizerTarget);
       let sampled_token = ''
-      
 
-      if (sample_token_index == 0){
+
+      if (sample_token_index == 0) {
         sample_token_index = '.'
-      }else{
+      } else {
         sampled_token = tokenizerTarget[sample_token_index];
       }
-    
+
       // Añade la palabra a la respuesta
       response.push(predictedWord);
-    
+
       // Verifica la condición de parada
       if (predictedIndex === endToken || response.length >= maxSeqLength) {
         stopCondition = true;
@@ -135,7 +137,7 @@ function App() {
       stateH = updatedH;
       stateC = updatedC;
     }
-  
+
     setPrediction(response.join(" "));
     console.log("Respuesta generada:", response.join(" "));
   };

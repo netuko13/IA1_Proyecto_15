@@ -4,6 +4,8 @@ import './App.css'; // Importamos el archivo de estilos
 import * as tf from '@tensorflow/tfjs';
 
 const ChatApp = () => {
+  //Process.env.PUBLIC_URL se asegura de que la ruta sea válida tanto en desarrollo como en producción.
+  const home = process.env.PUBLIC_URL
   const [inputValue, setInputValue] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [isTyping, setIsTyping] = useState(false); // Nuevo estado para controlar el indicador de escritura
@@ -30,8 +32,8 @@ const ChatApp = () => {
   // Función para cargar los tokenizers
   const loadTokenizers = async () => {
     try {
-      const inputRes = await fetch("/tokenizer_encoder_decoder.json");
-      const targetRes = await fetch("/tokenizer_encoder_decoder.json");
+      const inputRes = await fetch(home + "/tokenizer_encoder_decoder.json");
+      const targetRes = await fetch(home + "/tokenizer_encoder_decoder.json");
       const inputTokenizer = await inputRes.json();
       const targetTokenizer = await targetRes.json();
 
@@ -47,8 +49,8 @@ const ChatApp = () => {
   // Función para cargar el modelo del encoder y decoder
   const loadModels = async () => {
     try {
-      const encoder = await tf.loadLayersModel("/encoder_model/model.json");
-      const decoder = await tf.loadLayersModel("/decoder_model/model.json");
+      const encoder = await tf.loadLayersModel(home + "/encoder_model/model.json");
+      const decoder = await tf.loadLayersModel(home + "/decoder_model/model.json");
 
       setEncoderModel(encoder);
       setDecoderModel(decoder);
@@ -115,7 +117,7 @@ const ChatApp = () => {
       const stateHTensor = stateH;
       const stateCTensor = stateC;
 
-      
+
       // Predicción del decoder
       const [outputTokens, updatedH, updatedC] = decoderModel.predict([
         targetSeqTensor, // Entrada del token actual
@@ -125,22 +127,22 @@ const ChatApp = () => {
 
       // Sample a token from the output distribution
       const sample_token_index = outputTokens.argMax(-1).dataSync()[0];
-    
+
       // Obtén el índice del token predicho
       const predictedIndex = outputTokens.argMax(-1).dataSync()[0];
       const predictedWord = sequenceToText([sample_token_index], tokenizerTarget);
       let sampled_token = ''
-      
 
-      if (sample_token_index == 0){
+
+      if (sample_token_index == 0) {
         sample_token_index = '.'
-      }else{
+      } else {
         sampled_token = tokenizerTarget[sample_token_index];
       }
-    
+
       // Añade la palabra a la respuesta
       response.push(predictedWord);
-    
+
       // Verifica la condición de parada
       if (predictedIndex === endToken || response.length >= maxSeqLength) {
         stopCondition = true;
@@ -151,7 +153,7 @@ const ChatApp = () => {
       stateH = updatedH;
       stateC = updatedC;
     }
-    
+
     setPrediction(response.join(" "));
     console.log("Respuesta generada:", response.join(" "));
     return response.join(" ");
