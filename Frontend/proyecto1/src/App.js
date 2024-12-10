@@ -8,6 +8,13 @@ const ChatApp = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [isTyping, setIsTyping] = useState(false); // Nuevo estado para controlar el indicador de escritura
 
+  const [tokenizerInput, setTokenizerInput] = useState({});
+  const [tokenizerTarget, setTokenizerTarget] = useState({});
+  const [encoderModel, setEncoderModel] = useState(null);
+  const [decoderModel, setDecoderModel] = useState(null);
+  const [inputSequence, setInputSequence] = useState("");
+  const [prediction, setPrediction] = useState("");
+
   //Cargamos el modelo
   const [model, setModel] = useState(null);
   const [inputTokenizer, setInputTokenizer] = useState(null);
@@ -15,109 +22,147 @@ const ChatApp = () => {
   const [targetTokenizer, setTargetTokenizer] = useState(null);
   const [loading, setLoading] = useState(false); // Estado para "IA escribiendo..."
 
+  const maxSeqLength = 10;
+
 
   const defaultResponses = ['Hola', '¿Cómo estás?', 'Bienvenido'];
 
-  // Cargar el modelo al montar el componente
-  useEffect(() => {
-    const loadModel = async () => {
-      try {
-        const loadedModel = await tf.loadLayersModel('./model/model.json');
-        setModel(loadedModel);
-        console.log('Modelo cargado exitosamente: ');
-      } catch (error) {
-        console.error('Error al cargar el modelo:', error);
-      }
-    };
-    loadModel();
-  }, []);
+  // Función para cargar los tokenizers
+  const loadTokenizers = async () => {
+    try {
+      const inputRes = await fetch("/tokenizer_encoder_decoder.json");
+      const targetRes = await fetch("/tokenizer_encoder_decoder.json");
+      const inputTokenizer = await inputRes.json();
+      const targetTokenizer = await targetRes.json();
 
-  // Tokenizer simulado para este ejemplo
-  const tokenizer = {
-    word_index: {
-      'sos': 1,
-      'eos': 2,
-      'hello': 3,
-      'hi': 4
-      // Agrega las demás palabras de tu tokenizador aquí
-    },
-    index_word: {
-      1: 'sos',
-      2: 'eos',
-      3: 'hello',
-      4: 'hi'
-      // Agrega las demás palabras de tu tokenizador aquí
-    },
-    texts_to_sequences: (texts) => {
-      return texts.map(text => {
-        return text.split(' ').map(word => this.word_index[word] || 0); // 0 es el valor para palabras desconocidas
-      });
+      setTokenizerInput(inputTokenizer);
+      setTokenizerTarget(targetTokenizer);
+
+      console.log("Tokenizers cargados.");
+    } catch (error) {
+      console.error("Error al cargar los tokenizers:", error);
     }
   };
 
-  // Función para generar la respuesta del chatbot
-  const generateResponse = async (inputSeq) => {
-    if (!model) {
-      setResponse("Cargando el modelo...");
+  // Función para cargar el modelo del encoder y decoder
+  const loadModels = async () => {
+    try {
+      const encoder = await tf.loadLayersModel("/encoder_model/model.json");
+      const decoder = await tf.loadLayersModel("/decoder_model/model.json");
+
+      setEncoderModel(encoder);
+      setDecoderModel(decoder);
+      console.log("Modelos cargados correctamente.");
+    } catch (error) {
+      console.error("Error al cargar los modelos:", error);
+    }
+  };
+
+  // Cargar el modelo al montar el componente
+  useEffect(() => {
+    loadTokenizers();
+    loadModels();
+  }, []);
+
+  // Función para convertir texto a secuencia de tokens
+  const textToSequence = (text, tokenizer, maxLen = 10) => {
+    const tokens = text
+      .toLowerCase()
+      .split(" ")
+      .map((word) => tokenizer[word] || tokenizer["<unk>"]); // Token desconocido
+
+    while (tokens.length < maxLen) tokens.push(0); // Padding
+    return tokens.slice(0, maxLen);
+  };
+
+  // Función para convertir secuencia de tokens a texto
+  const sequenceToText = (sequence, tokenizer) => {
+    const invertedTokenizer = {};
+    Object.keys(tokenizer).forEach((word) => {
+      invertedTokenizer[tokenizer[word]] = word;
+    });
+    return sequence.map((token) => invertedTokenizer[token] || "<unk>").join(" ");
+  };
+
+  // Función principal para generar la predicción
+  const generateResponse = async () => {
+    if (!encoderModel || !decoderModel) {
+      alert("Modelos no cargados todavía.");
       return;
     }
 
-    // Asegurarse de que el modelo esté cargado
-    setLoading(true);
+    // Entrada: tokens de la frase input
+    const inputTokens = textToSequence(inputSequence, tokenizerInput, 10);
+    const inputTensor = tf.tensor2d([inputTokens]); // Tensor para el encoder
 
-    try {
-      // Codificar la entrada para obtener los estados del encoder
-      const encoderModel = model.getLayer('encoder_model');
-      const encoderInputTensor = tf.tensor(inputSeq);
-      const statesValue = await encoderModel.predict(encoderInputTensor).array();
+    // ----------------------- ENCODER -----------------------
+    // Obtiene los estados iniciales del encoder
+    const encoderOutputs = encoderModel.predict(inputTensor);
+    let stateH = encoderOutputs[0]; // Estado h
+    let stateC = encoderOutputs[1]; // Estado c
 
-      // Inicializar la secuencia objetivo con el token de inicio (SOS)
-      let targetSeq = [tokenizer.word_index['sos']];
-      let response = [];
-      let stopCondition = false;
+    // ----------------------- DECODER -----------------------
+    const startToken = tokenizerTarget["sos"] || 2; // Token de inicio
+    const endToken = tokenizerTarget["eos"] || 3; // Token de finalización
 
-      // Generar la respuesta palabra por palabra
-      while (!stopCondition) {
-        // Predecir con el modelo decoder
-        const decoderModel = model.getLayer('decoder_model');
-        const output = await decoderModel.predict([tf.tensor([targetSeq]), ...statesValue]).array();
+    let targetSeq = tf.tensor2d([[startToken]]); // Secuencia de entrada inicial al decoder
+    let stopCondition = false;
+    let response = [];
 
-        // Obtener el índice del token de la distribución de salida
-        const sampledTokenIndex = output[0][0];
+    while (!stopCondition) {
+      // Asegúrate de que los inputs sean tensores
+      const targetSeqTensor = tf.tensor2d([[startToken]]);
+      const stateHTensor = stateH;
+      const stateCTensor = stateC;
 
-        // Obtener la palabra correspondiente
-        const sampledToken = tokenizer.index_word[sampledTokenIndex] || '.';
+      
+      // Predicción del decoder
+      const [outputTokens, updatedH, updatedC] = decoderModel.predict([
+        targetSeqTensor, // Entrada del token actual
+        stateHTensor,    // Estado H actual
+        stateCTensor     // Estado C actual
+      ]);
 
-        // Agregar la palabra a la respuesta
-        response.push(sampledToken);
+      // Sample a token from the output distribution
+      const sample_token_index = outputTokens.argMax(-1).dataSync()[0];
+    
+      // Obtén el índice del token predicho
+      const predictedIndex = outputTokens.argMax(-1).dataSync()[0];
+      const predictedWord = sequenceToText([sample_token_index], tokenizerTarget);
+      let sampled_token = ''
+      
 
-        // Condición de salida: token de fin de secuencia o longitud máxima
-        if (sampledToken === 'eos' || response.length > 30) { // Ajusta el max length si es necesario
-          stopCondition = true;
-        }
-
-        // Actualizar la secuencia objetivo con el token muestreado
-        targetSeq = [sampledTokenIndex];
-
-        // Actualizar los estados del decoder
-        statesValue = output.slice(1);
+      if (sample_token_index == 0){
+        sample_token_index = '.'
+      }else{
+        sampled_token = tokenizerTarget[sample_token_index];
+      }
+    
+      // Añade la palabra a la respuesta
+      response.push(predictedWord);
+    
+      // Verifica la condición de parada
+      if (predictedIndex === endToken || response.length >= maxSeqLength) {
+        stopCondition = true;
       }
 
-      setResponse(response.join(' '));
-
-    } catch (error) {
-      console.error("Error al generar la respuesta:", error);
-      setResponse("Error al generar respuesta");
+      // Actualiza el token de entrada y los estados
+      targetSeq = tf.tensor2d([[predictedIndex]]);
+      stateH = updatedH;
+      stateC = updatedC;
     }
-
-    setLoading(false);
+    
+    setPrediction(response.join(" "));
+    console.log("Respuesta generada:", response.join(" "));
+    return response.join(" ");
   };
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === '') return;
 
+    setInputSequence(inputValue);
     setLoading(true); // Muestra "IA escribiendo..."
-    const response = await generateResponse(inputValue); // Genera respuesta del modelo
+    const response = await generateResponse(); // Genera respuesta del modelo
     setLoading(false);
 
     // Actualiza el historial del chat

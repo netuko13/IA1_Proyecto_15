@@ -11,12 +11,14 @@ from tensorflow.keras.models import Model  # Construcción del modelo
 from tensorflow.keras.utils import to_categorical  # Codificación one-hot
 import tensorflow as tf
 import keras
+import json
+import pickle
 
 warnings.filterwarnings('ignore')  # Ignorar advertencias
 
 # --------------------- Carga de datos ---------------------
 # Cargar el conjunto de datos desde un archivo CSV
-df = pd.read_csv('./data_clean/data_clean_c.csv', sep=',', names=['Question', 'Answer'])
+df = pd.read_csv('./data_clean/data_clean_complete.csv', sep=',', names=['Question', 'Answer'])
 
 # Verificación de valores nulos en las columnas 'Question' y 'Answer'
 null_question = df['Question'].isnull().sum()
@@ -75,10 +77,29 @@ max_seq_length = 10  # Longitud máxima de las secuencias
 tokenizer = Tokenizer(num_words=num_words, oov_token='<unk>')
 tokenizer.fit_on_texts(df['Encoder Inputs'].tolist() + df['Decoder Inputs'].tolist())
 
+# Guardar los tokenizers
+with open('tokenizer_encoder_decoder.pkl', 'wb') as f:
+    pickle.dump(tokenizer, f)
+
+tokenizer_input = Tokenizer(filters='!.,?¡¿')  # Para la entrada
+
+# Recuperamos el array
+with open('tokenizer_encoder_decoder.pkl', 'rb') as f:
+    tokenizer_input = pickle.load(f)
+
+# Guardar los tokenizers como JSON
+with open('tokenizer_encoder_decoder.json', 'w') as f:
+    json.dump(tokenizer_input.word_index, f)
+
+print("Tokenizers convertidos a JSON correctamente.")
+
 # Convertir el texto en secuencias numéricas
 encoder_inputs = tokenizer.texts_to_sequences(df['Encoder Inputs'].tolist())
 decoder_inputs = tokenizer.texts_to_sequences(df['Decoder Inputs'].tolist())
 decoder_targets = tokenizer.texts_to_sequences(df['Decoder Targets'].tolist())
+
+#Guardamos los array
+
 
 # Aplicar padding a las secuencias
 encoder_inputs = pad_sequences(encoder_inputs, maxlen=max_seq_length, padding='post', truncating='post')
@@ -254,3 +275,11 @@ response = generate_response(input_sequence)
 # Imprime la secuencia de entrada y la respuesta generada.
 print("Input:", f'{input_sequence}')
 print("Response:", response)
+
+# Guardar los modelos
+encoder_model.save("encoder_model.h5")
+decoder_model.save("decoder_model.h5")
+
+# Generar el javascript
+# tensorflowjs_converter --input_format keras encoder_model.h5 encoder_model/
+# tensorflowjs_converter --input_format keras decoder_model.h5 decoder_model/
