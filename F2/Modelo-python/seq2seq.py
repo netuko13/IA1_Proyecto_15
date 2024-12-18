@@ -15,7 +15,7 @@ import tensorflow as tf
 import pickle
 from tensorflow.keras import layers, activations, models, preprocessing
 import kagglehub
-from google.colab import files
+#from google.colab import files
 
 path = kagglehub.dataset_download("kausr25/chatterbotenglish")
 
@@ -74,9 +74,9 @@ df
 # Lista de archivos a integrar
 archivos = [
             'alpaca_spanish.csv',
-            #'archivo2.csv',
-            #'archivo3.csv',
-            #'archivo4.csv',
+            #'conversaciones_cl.csv',
+            'conversations_beginners.csv',
+            #'english_dictionary.csv',
             #'archivo5.csv'
             ]
 
@@ -119,8 +119,6 @@ df = pd.DataFrame(data)
 # Mostrar el DataFrame
 df
 
-
-
 # Agrega etiquetas <START> y <END> a las respuestas
 answers_with_tags = list()
 for i in range(len(answers)):
@@ -154,6 +152,25 @@ def tokenize(sentences):
         vocabulary += tokens
         tokens_list.append(tokens)
     return tokens_list, vocabulary
+
+# Descargar el json
+import json
+# Guardar los tokenizers
+with open('tokenizer_encoder_decoder.pkl', 'wb') as f:
+    pickle.dump(tokenizer, f)
+
+tokenizer_input = preprocessing.text.Tokenizer()  # Para la entrada
+
+# Recuperamos el array
+with open('tokenizer_encoder_decoder.pkl', 'rb') as f:
+    tokenizer_input = pickle.load(f)
+
+# Guardar los tokenizers como JSON
+with open('tokenizer_encoder_decoder.json', 'w') as f:
+    json.dump(tokenizer_input.word_index, f)
+
+# Descargar el archivo combinado
+#files.download('tokenizer_encoder_decoder.json')
 
 # Preparación de datos para el encoder
 tokenized_questions = tokenizer.texts_to_sequences(questions)  # Convierte texto a secuencias de enteros
