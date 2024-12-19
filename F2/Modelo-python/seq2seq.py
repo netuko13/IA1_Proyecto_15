@@ -14,6 +14,7 @@ import numpy as np
 import tensorflow as tf
 import pickle
 from tensorflow.keras import layers, activations, models, preprocessing
+from tensorflow.keras.callbacks import EarlyStopping
 import kagglehub
 #from google.colab import files
 
@@ -73,11 +74,11 @@ df
 
 # Lista de archivos a integrar
 archivos = [
-            'alpaca_spanish.csv',
+            #'alpaca_spanish.csv',
             #'conversaciones_cl.csv',
             'conversations_beginners.csv',
             #'english_dictionary.csv',
-            #'archivo5.csv'
+            'conversaciones_complete.csv'
             ]
 
 # Crear una lista vacía para almacenar los DataFrames
@@ -275,3 +276,5 @@ for _ in range(10):
 
     print(decoded_translation)
 
+# Convertirlo a javascript
+# tensorflowjs_converter --input_format keras model.h5 encoder_model/
