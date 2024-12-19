@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Handlee&family=Kode+Mono:wght@400..700&display=swap');
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 400 to 700
+/*.kode-mono-<uniquifier> {
+    font-family: "Kode Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: <weight>;
+    font-style: normal;
+  }*/
+
+/*
+.klee-one-regular {
+  font-family: "Klee One", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+*/
+
+body {
+
+  /*font-family: "Lucida Console", "Courier New", monospace;
+    background-image: url('/src/assets/Snow.svg');
+    background-size: cover; /* Ajusta el tamaño */
+  /*background-position: center; /* Centra la imagen */
+  /*background-repeat: no-repeat; /* Evita que se repita */
+  height: 100vh;
+  /* Opcional: cubre toda la altura del viewport */
+  width: 100%;
+  /* Cubre todo el ancho */
+ // background-color: rgb(0, 0, 0);
+}
+
+.digital-rain-canvas {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  /* Detrás de todos los otros elementos */
+  pointer-events: none;
+  /* Para evitar interferencias con interacciones de usuario */
+}
+
+.chat_div {
+  position: relative;
+  z-index: 1;
+  width: 800px;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.download_icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+}
+
+.sidebar {
+  margin: 1em;
+  font-family: "Kode Mono", monospace !important;
+  color: #f2ddcc;
+}
+
+.cs-message--outgoing .cs-message__content {
+  background-color: rgba(253, 253, 253, 0.75) !important;
+  border-radius: 0.7em 0.7em 0 0.7em !important;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.cs-message--incoming .cs-message__content {
+  background-color: #39ca59 !important;
+  border-radius: 0 .7em .7em .7em !important;
+  font-family: "Kode Mono", monospace !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+
+}
+
+.cs-chat-container,
+.cs-main-container {
+  background-color: transparent !important;
+}
+
+.cs-message-list,
+.cs-conversation-header,
+.cs-sidebar--left,
+.cs-message-input {
+  background-color: hsla(214.8, 54.4%, 29.2%, 0.8) !important;
+}
