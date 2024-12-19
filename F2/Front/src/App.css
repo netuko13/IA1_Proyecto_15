@@ -1,0 +1,119 @@
+/* Fondo de la página */
+body {
+    background: #041a55;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  /* Contenedor principal */
+  .chat-container {
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    height: 500px;
+  }
+  
+  /* Caja del chat */
+  .chat-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+  }
+  
+  /* Personalización de los mensajes del chat */
+  .incoming-message {
+    background-color: #3e3e3e;
+    color: #fff;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 5px 0;
+    align-self: flex-start;
+    text-align: left;
+    max-width: 80%;
+    /*float: right;*/
+  }
+  
+  .outgoing-message {
+    background-color: #1e90ff;
+    color: #fff;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 5px 0;
+    align-self: flex-end;
+    max-width: 80%;
+    text-align: right;
+    /*float: left;*/
+  }
+  
+  /* Estilo para el input y el botón */
+  .cs-message-input {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #333;
+    
+  }
+  
+  .cs-message-input input {
+    width: 50%;
+    background-color: #2e9994;
+    border: none;
+    color: #fff;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+  }
+  
+  .cs-message-input button {
+    background-color: #1e90ff;
+    border: none;
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cs-message-input button:hover {
+    background-color: #007bff;
+  }
+  
+  /* Botón de descargar chat */
+  .download-button {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .download-button:hover {
+    background-color: #218838;
+  }
+  
+
+  /*
+  fondo semitransparente
+  background-color: hsla(0,0%,64.7%,.5)
+
+
+  background-color: rgba(157,240,201,.75);
+
+  color de fuente blanco hueso
+  #f2ddcc
+  */
