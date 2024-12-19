@@ -72,13 +72,14 @@ df = pd.DataFrame(data)
 # Mostrar el DataFrame
 df
 
+'''
 # Lista de archivos a integrar
 archivos = [
             #'alpaca_spanish.csv',
             #'conversaciones_cl.csv',
-            'conversations_beginners.csv',
+            #'conversations_beginners.csv',
             #'english_dictionary.csv',
-            'conversaciones_complete.csv'
+            #'conversaciones_complete.csv'
             ]
 
 # Crear una lista vacía para almacenar los DataFrames
@@ -119,7 +120,7 @@ df = pd.DataFrame(data)
 
 # Mostrar el DataFrame
 df
-
+'''
 # Agrega etiquetas <START> y <END> a las respuestas
 answers_with_tags = list()
 for i in range(len(answers)):
@@ -216,7 +217,7 @@ model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='categorical_crossen
 model.summary()
 
 # Entrenamiento del modelo
-model.fit([encoder_input_data, decoder_input_data], decoder_output_data, batch_size=50, epochs=150)
+model.fit([encoder_input_data, decoder_input_data], decoder_output_data, batch_size=50, epochs=10)
 model.save('model.h5')  # Guarda el modelo entrenado
 
 # Función para construir modelos de inferencia
