@@ -1,0 +1,761 @@
+{
+   "intents": [
+      {
+         "tag": "greeting",
+         "patterns": [
+            "Hola",
+            "¿Cómo estás?",
+            "¿Hay alguien ahí?",
+            "Hola",
+            "Buen día",
+            "¿Qué tal?",
+            "¿Cómo están?",
+            "heyy",
+            "¿qué pasa?",
+            "??? ??? ???"
+         ],
+         "responses": [
+            "¡Hola!",
+            "¡Qué bueno verte de nuevo!",
+            "Hola, ¿cómo puedo ayudarte?"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "adiós",
+         "patterns": [
+            "cya",
+            "nos vemos",
+            "adiós",
+            "hasta luego",
+            "adiós",
+            "me voy",
+            "adiós",
+            "que tengas un buen día",
+            "hablo luego",
+            "ttyl",
+            "me tengo que ir",
+            "gtg"
+         ],
+         "responses": [
+            "Me da pena verte partir :(",
+            "hablo luego",
+            "¡adiós!",
+            "vuelve pronto"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "creador",
+         "patterns": [
+            "cómo se llaman tus desarrolladores",
+            "cómo se llaman tus creadores",
+            "cómo se llaman los desarrolladores",
+            "cómo se llaman los creadores",
+            "quién te creó",
+            "tus desarrolladores",
+            "tus creadores",
+            "quiénes son tus desarrolladores",
+            "desarrolladores",
+            "por quién te creó",
+            "quién te creó",
+            "quién te creó",
+            "quién te creó",
+            "creadores",
+            "quién te creó",
+            "quién te diseñó"
+         ],
+         "responses": [
+            "Estudiantes universitarios"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "name",
+         "patterns": [
+            "nombre",
+            "tu nombre",
+            "tienes un nombre",
+            "cómo te llamas",
+            "cómo te llamas",
+            "cómo hacerte",
+            "¿cómo te llamas?",
+            "qué eres",
+            "quién eres",
+            "quién es",
+            "con quién estoy chateando",
+            "con quién voy a hablar contigo",
+            "qué eres"
+         ],
+         "responses": [
+            "Puedes llamarme Lector de Mente",
+            "Soy Lector de Mente",
+            "Soy un Chatbot",
+            "Soy tu ayudante"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "hours",
+         "patterns": [
+            "horario de la universidad",
+            "cuál es el horario de la universidad",
+            "días laborables",
+            "cuándo están abiertos",
+            "cuál es su horario",
+            "horario de funcionamiento",
+            "cuándo está abierta la universidad",
+            "horario de la universidad",
+            "qué pasa con el horario de la universidad",
+            "la universidad abre los sábados",
+            "cuéntame algo sobre el horario de la universidad",
+            "cuál es el horario de la universidad",
+            "cuándo debería ir a la universidad",
+            "cuándo debería asistir a la universidad",
+            "cuál es mi horario de universidad",
+            "horario de la universidad",
+            "horario de la universidad"
+         ],
+         "responses": [
+            "¡La universidad está abierta de 8 a. m. a 5 p. m. de lunes a sábado!"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "número",
+         "patterns": [
+            "más información",
+            "datos de contacto",
+            "cómo contactar con la universidad",
+            "número de teléfono de la universidad",
+            "número de la universidad",
+            "¿cuál es tu número de contacto?",
+            "¿número de contacto?",
+            "¿cómo llamarte?",
+            "¿número de teléfono de la universidad?",
+            "¿cómo puedo contactarte?",
+            "¿puedo obtener tu número de teléfono?",
+            "¿cómo puedo llamarte?",
+            "número de teléfono",
+            "número de teléfono",
+            "llamar"
+         ],
+         "responses": [
+            "Puedes contactar al: NUMERO"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "curso",
+         "patterns": [
+            "lista de cursos",
+            "lista de cursos ofrecidos",
+            "lista de cursos ofrecidos en",
+            "¿cuáles son los cursos ofrecidos en tu facultad?",
+            "cursos?",
+            "cursos ofrecidos",
+            "cursos ofrecidos en (nombre de tu universidad(UNI))",
+            "cursos que ofreces",
+            "sedes?",
+            "cursos disponibles en la UNI?",
+            "sedes disponibles en tu facultad?",
+            "¿cuáles son los cursos en la UNI?",
+            "¿cuáles son las sedes en la UNI?",
+            "cuáles son los cursos en la UNI?",
+            "sedes disponibles en la UNI?",
+            "¿puedes decirme los cursos disponibles en la UNI?",
+            "¿puedes decirme las sedes disponibles en la UNI?",
+            "ingeniería informática?",
+            "computadora",
+            "ingeniería informática?",
+            "it",
+            "IT",
+            "Tecnología de la información",
+            "IA/ML",
+            "Ingeniería mecánica",
+            "Ingeniería química",
+            "Ingeniería civil"
+         ],
+         "responses": [
+            "Nuestra universidad ofrece Tecnologías de la Información, Ingeniería Informática, Ingeniería Mecánica, Ingeniería Química, Ingeniería Civil y otras Ingenierías."
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "tarifas",
+         "patterns": [
+            "información sobre la tarifa",
+            "información sobre la tarifa",
+            "cuéntame la tarifa",
+            "tarifa universitaria",
+            "tarifa por semestre",
+            "cuál es la tarifa de cada semestre",
+            "cuál es la tarifa de cada año",
+            "cuál es la tarifa",
+            "cuáles son las tarifas",
+            "cuánto cuestan las tarifas",
+            "tarifas para el primer año",
+            "tarifas",
+            "sobre las tarifas",
+            "cuéntame algo sobre las tarifas",
+            "cuáles son las tarifas del hotel",
+            "cuánto cuestan las tarifas",
+            "tarifas del hotel",
+            "tarifas de la habitación con aire acondicionado",
+            "tarifas de la habitación sin aire acondicionado",
+            "tarifas de la habitación con aire acondicionado para niñas",
+            "tarifas de la habitación sin aire acondicionado para niñas",
+            "tarifas de la habitación con aire acondicionado para niños",
+            "tarifas de la habitación sin aire acondicionado para niños"
+         ],
+         "responses": [
+            "Para conocer los detalles de las tarifas, visite <a target=\"_blank\" href=\"LINK\"> aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "ubicación",
+         "patterns": [
+            "dónde está ubicada la universidad",
+            "la universidad está ubicada en",
+            "dónde está la universidad",
+            "dónde está ubicada la universidad",
+            "dirección de la universidad",
+            "cómo llegar a la universidad",
+            "ubicación de la universidad",
+            "dirección de la universidad",
+            "dónde está la universidad",
+            "cómo puedo llegar a la universidad",
+            "cuál es la dirección de la universidad",
+            "cuál es la dirección de la universidad",
+            "dirección",
+            "ubicación"
+         ],
+         "responses": [
+            "<a target=\"_blank\" href=\"AGREGA TU ENLACE DE GOOGLE MAP AQUÍ\"> aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "hotel",
+         "patterns": [
+            "instalaciones del hotel",
+            "servicio del hotel",
+            "ubicación del hotel",
+            "dirección del hotel",
+            "instalaciones del hotel",
+            "tarifas del hotel",
+            "¿La universidad ofrece hotel?",
+            "¿Hay algún hotel?",
+            "¿Dónde está el hotel?",
+            "¿Tienen hotel?",
+            "hotel",
+            "capacidad del hotel",
+            "cuál es la tarifa del hotel",
+            "cómo llegar al hotel",
+            "cuál es la dirección del hotel",
+            "a qué distancia está el hotel de la universidad",
+            "distancia entre el hotel y la universidad",
+            "dónde está el hotel",
+            "qué tan grande es el hotel",
+            "distancia entre la universidad y el hotel",
+            "distancia entre el hotel y la universidad"
+         ],
+         "responses": [
+            "Para obtener más información sobre el hotel, visita <a target=\"_blank\" href=\"AGREGA EL ENLACE EN PDF CON LOS DETALLES DE TU hotel O CUALQUIER ENLACE DE INFORMACIÓN O AGREGA TUS PROPIAS responses\"> aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "event",
+         "patterns": [
+            "eventos organizados",
+            "lista de eventos",
+            "lista de eventos organizados en la universidad",
+            "lista de eventos realizados en la universidad",
+            "¿Qué eventos se realizan en la universidad?",
+            "¿Se celebra algún evento en la universidad?",
+            "¿Eventos?",
+            "funciones",
+            "cuáles son los eventos",
+            "cuéntame sobre los eventos",
+            "¿qué pasa con los eventos?"
+         ],
+         "responses": [
+            "Para conocer los detalles del evento, visita <a target=\"_blank\" href=\"AGREGA TU ENLACE DE FUNCIONES O TU PROPIA RESPUESTA\"> aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "document",
+         "patterns": [
+            "documento a llevar",
+            "documentos necesarios para la admisión",
+            "documentos necesarios al momento de la admisión",
+            "documentos necesarios durante la admisión",
+            "documentos requeridos para la admisión",
+            "documentos requeridos al momento de la admisión",
+            "documentos requeridos durante la admisión",
+            "¿Qué documentos se requieren para la admisión?",
+            "Qué documento llevar para la admisión",
+            "documentos",
+            "qué documentos necesito",
+            "qué documentos necesito para la admisión",
+            "documentos necesarios"
+         ],
+         "responses": [
+            "Para saber más sobre los documentos requeridos visita <a target=\"_blank\" href=\"AGREGA EL ENLACE DEL DOCUMENTO DE ORIENTACIÓN DE ADMISIÓN DESDE EL SITIO WEB DE TU UNIVERSIDAD\"> aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "pisos",
+         "patterns": [
+            "tamaño del campus",
+            "tamaño del edificio",
+            "cuántos pisos tiene la universidad",
+            "pisos en la universidad",
+            "pisos en la universidad",
+            "cuánto mide el edificio de la Facultad de Ingeniería de la UNI",
+            "pisos"
+         ],
+         "responses": [
+            "Mi universidad tiene un total de 2 pisos"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "plan de estudios",
+         "patterns": [
+            "Plan de estudios para TI",
+            "cuál es el plan de estudios de Tecnología de la información",
+            "plan de estudios",
+            "horario",
+            "qué es el plan de estudios de TI",
+            "plan de estudios",
+            "¿Cuál es la próxima clase?"
+         ],
+         "responses": [
+            "El horario se proporciona directamente a los estudiantes O para conocer el plan de estudios, visite <a target=\"_blank\" href=\"ENLACE AL HORARIO\"> aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "biblioteca",
+         "patterns": [
+            "hay alguna biblioteca",
+            "instalaciones de la biblioteca",
+            "instalaciones de la biblioteca",
+            "tiene biblioteca",
+            "tiene la universidad instalaciones de biblioteca",
+            "biblioteca de la universidad",
+            "dónde puedo conseguir libros",
+            "instalaciones de libros",
+            "dónde está la biblioteca",
+            "biblioteca",
+            "información de la biblioteca",
+            "información de los libros de la biblioteca",
+            "cuéntame sobre la biblioteca",
+            "cuántas bibliotecas"
+         ],
+         "responses": [
+            "hay una biblioteca enorme y espaciosa. el horario es de 8 a. m. a 6 p. m. y para obtener más información, visite <a target=\"blank\" href=\"ADD LIBRARY DETAIL LINK\">aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "infraestructura",
+         "patterns": [
+            "cómo es la infraestructura de la universidad",
+            "infraestructura",
+            "infraestructura de la universidad"
+         ],
+         "responses": [
+            "Nuestra Universidad tiene una excelente infraestructura. El campus está limpio. Buenos laboratorios de TI con buena velocidad de conexión a Internet"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "comedor",
+         "patterns": [
+            "instalaciones de comida",
+            "instalaciones de comedor",
+            "instalación de comedor",
+            "hay comedor",
+            "hay una cafetería en la universidad",
+            "tiene comedor la universidad",
+            "donde está el comedor",
+            "donde está la cafetería",
+            "comedor",
+            "comida",
+            "cafetería"
+         ],
+         "responses": [
+            "nuestra universidad tiene comedor con variedad de comida disponible"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "menú",
+         "patterns": [
+            "menú de comida",
+            "comida en el comedor",
+            "qué hay en el menú",
+            "qué hay disponible en el comedor de la universidad",
+            "qué comidas podemos conseguir en el comedor de la universidad",
+            "variedad de comida",
+            "¿qué hay para comer?"
+         ],
+         "responses": [
+            "servimos Franky, Locho, Alu-puri, Kachori, Khavsa, Thaali y muchos más en el menú"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "placement",
+         "patterns": [
+            "Qué es la colocación universitaria",
+            "Qué empresas visitan en la universidad",
+            "Cuál es el paquete promedio",
+            "visitas de empresas",
+            "paquete",
+            "Acerca de la colocación",
+            "colocación",
+            "contratación",
+            "empresas"
+         ],
+         "responses": [
+            "Para obtener información sobre la colocación, visite <a target=\"_blank\" href=\"LINK DE INFORMACIÓN SOBRE COLOCACIÓN DESDE EL SITIO WEB DE SU UNIVERSIDAD SI LO TIENE\">aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "ithod",
+         "patterns": [
+            "Quién es el jefe del departamento",
+            "Dónde está el jefe del departamento",
+            "el jefe del departamento",
+            "el nombre del jefe del departamento"
+         ],
+         "responses": [
+            "Todos los departamentos de ingeniería tienen solo un jefe XYZ que está disponible en (nombre del lugar)"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "computerhod",
+         "patterns": [
+            "Quién es el jefe de equipo",
+            "Dónde está el jefe de equipo",
+            "jefe de equipo",
+            "nombre del jefe de equipo"
+         ],
+         "responses": [
+            "Todos los departamentos de ingeniería tienen solo un jefe XYZ que está disponible en (NOMBRE DEL LUGAR)"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "extchod",
+         "patterns": [
+            "Quién es el jefe de equipo externo",
+            "Dónde está el jefe de equipo externo",
+            "jefe de equipo externo",
+            "nombre del jefe de equipo externo"
+         ],
+         "responses": [
+            "Los jefes de equipo de las distintas escuelas son diferentes. Por lo tanto, sea más claro con su escuela o departamento"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "principal",
+         "patterns": [
+            "what is the name of principal",
+            "whatv is the principal name",
+            "principal name",
+            "Who is college principal",
+            "Where is principal's office",
+            "principal",
+            "name of principal"
+         ],
+         "responses": [
+            "XYZ is college principal and if you need any help then call your branch hod first.That is more appropriate"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "sem",
+         "patterns": [
+            "fechas de exámenes",
+            "horario de exámenes",
+            "cuándo es el examen semestral",
+            "horario de exámenes semestrales",
+            "sem",
+            "semestre",
+            "examen",
+            "cuándo es el examen",
+            "horario de exámenes",
+            "fechas de exámenes",
+            "cuándo es el semestre"
+         ],
+         "responses": [
+            "Aquí está el sitio web del Calendario Académico <a target=\"_blank\" href=\"TU CALENDARIO ACADÉMICO\"></a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "admisión",
+         "patterns": [
+            "cuál es el proceso de admisión",
+            "cuál es el proceso de admisión",
+            "cómo solicitar admisión en tu universidad",
+            "cuál es el proceso de admisión",
+            "admisión",
+            "proceso de admisión"
+         ],
+         "responses": [
+            "La solicitud también se puede enviar en línea a través del <a target=\"_blank\" href=\"LINK DEL DOCUMENTO DE ADMISIÓN\">sitio web</a> de la universidad"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "beca",
+         "patterns": [
+            "beca",
+            "¿Hay becas disponibles?",
+            "beca ingeniería",
+            "beca it",
+            "beca ce",
+            "beca mecánica",
+            "beca civil",
+            "beca química",
+            "beca para IA/ML",
+            "becas disponibles",
+            "beca para ingeniería informática",
+            "beca para ingeniería informática",
+            "beca para ingeniería mecánica",
+            "beca para ingeniería civil",
+            "beca para ingeniería química",
+            "lista de becas",
+            "beca comps",
+            "beca informática",
+            "beca mecánica",
+            "beca civil",
+            "beca química",
+            "beca automotriz",
+            "primer año beca",
+            "beca de segundo año",
+            "beca de tercer año",
+            "beca de cuarto año"
+         ],
+         "responses": [
+            "Nuestra universidad apoya muchas becas gubernamentales. Para obtener más información y actualizaciones, visite <a target=\"_blank\" href=\"(LINK DE DETALLES DE LA BECA)\">aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "instalaciones",
+         "patterns": [
+            "Qué instalaciones ofrece la universidad",
+            "Instalaciones de la universidad",
+            "¿Cuáles son las instalaciones de la universidad",
+            "instalaciones",
+            "instalaciones proporcionadas"
+         ],
+         "responses": [
+            "El departamento de Ingeniería de nuestra universidad ofrece un laboratorio de aire acondicionado completo con conexión a Internet, aula inteligente, auditorio, biblioteca y cantina"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "admisión universitaria",
+         "patterns": [
+            "número máximo de estudiantes",
+            "número de plazas por sucursal",
+            "número de plazas en cada sucursal",
+            "número máximo de plazas",
+            "admisión máxima de estudiantes",
+            "¿Cuál es la admisión universitaria?",
+            "cuántos estudiantes se aceptan en cada sucursal",
+            "asignación de plazas",
+            "plazas"
+         ],
+         "responses": [
+            "Para TI, informática y demás, 60 por sucursal y la plaza puede variar según el departamento"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "uniform",
+         "patterns": [
+            "college dress code",
+            "college dresscode",
+            "what is the uniform",
+            "podemos usar ropa informal",
+            "Tiene la universidad un uniforme",
+            "Hay algún uniforme",
+            "uniform",
+            "what about uniform",
+            "tenemos que usar uniforme"
+         ],
+         "responses": [
+            "INGRESA TU PROPIO CIRCULER DE UNIFORME UNIVERSITARIO"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "committee",
+         "patterns": [
+            "cuáles son los diferentes comités en la universidad",
+            "diferentes comités en la universidad",
+            "¿hay algún comité en la universidad?",
+            "dame detalles del comité",
+            "committee",
+            "cuántos comités hay en la universidad"
+         ],
+         "responses": [
+            "Para los diferentes comités en la universidad, contacta a este número: AGREGAR NÚMERO"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "random",
+         "patterns": [
+            "Te amo",
+            "¿Quieres casarte conmigo?",
+            "¿Me amas?"
+         ],
+         "responses": [
+            "No soy un programa para esto, por favor haz la consulta apropiada"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "swear",
+         "patterns": [
+            "joder",
+            "perra",
+            "cállate",
+            "infierno",
+            "estúpido",
+            "idiota",
+            "tonto",
+            "imbécil",
+            "cabrón"
+         ],
+         "responses": [
+            "por favor usa un lenguaje apropiado",
+            "Mantener la decencia sería apreciado"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "vacaciones",
+         "patterns": [
+            "días festivos",
+            "cuándo semestre comienza",
+            "cuándo termina el semestre",
+            "cuándo son las vacaciones",
+            "lista de vacaciones",
+            "Vacaciones en este año",
+            "lista de vacaciones",
+            "sobre las vacaciones",
+            "sobre las vacaciones",
+            "Cuándo son las vacaciones",
+            "Cuándo son las vacaciones",
+            "cuánto durarán las vacaciones"
+         ],
+         "responses": [
+            "Los coordinadores de clase te entregan el calendario académico después de que te unes a tus respectivas clases"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "deportes",
+         "patterns": [
+            "deportes y juegos",
+            "proporciona detalles deportivos",
+            "infraestructura deportiva",
+            "instalaciones deportivas",
+            "información sobre deportes",
+            "actividades deportivas",
+            "por favor, proporciona información sobre deportes y juegos"
+         ],
+         "responses": [
+            "Nuestra universidad fomenta el desarrollo integral de los estudiantes y, por lo tanto, ofrece instalaciones deportivas en el campus. Para más detalles, visite <a target=\"_blank\" href=/\"(LINK SI TIENE)\">aquí</a>"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "saludo",
+         "patterns": [
+            "okk",
+            "okie",
+            "buen trabajo",
+            "bien hecho",
+            "buen trabajo",
+            "gracias por la ayuda",
+            "Gracias",
+            "está bien",
+            "Gracias",
+            "Buen trabajo",
+            "k",
+            "ok",
+            "bien"
+         ],
+         "responses": [
+            "Me alegro de haberte ayudado",
+            "bienvenido, ¿hay algo más en lo que pueda ayudarte?"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "task",
+         "patterns": [
+            "what can you do",
+            "what are the thing you can do",
+            "things you can do",
+            "what can u do for me",
+            "how u can help me",
+            "por qué debería utilizarte"
+         ],
+         "responses": [
+            "Puedo responder a preguntas de nivel intermedio bajo sobre la universidad",
+            "Puedes hacerme preguntas sobre la universidad y trataré de responderlas"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "burla",
+         "patterns": [
+            "burla",
+            "es activa la práctica de burla en la universidad",
+            "tiene la universidad alguna instalación anti-burla",
+            "hay casos de burla",
+            "se practica burla aquí",
+            "burla contra",
+            "instalación anti-burla",
+            "estudiantes de tercer año de burla",
+            "historial de burla",
+            "incidentes de burla"
+         ],
+         "responses": [
+            "Estamos orgullosos de informarle que nuestra universidad ofrece un entorno libre de acoso y tenemos reglas estrictas contra el acoso"
+         ],
+         "context_set": ""
+      },
+      {
+         "tag": "hod",
+         "patterns": [
+            "hod",
+            "nombre del hod",
+            "quién es el hod"
+         ],
+         "responses": [
+            "Los HOD difieren para cada rama, sea más específico como: (HOD it)"
+         ],
+         "context_set": ""
+      }
+   ]
+}
