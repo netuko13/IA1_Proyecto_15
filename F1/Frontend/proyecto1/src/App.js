@@ -5,7 +5,7 @@ import * as tf from '@tensorflow/tfjs';
 
 const ChatApp = () => {
   //Process.env.PUBLIC_URL se asegura de que la ruta sea válida tanto en desarrollo como en producción.
-  const home = process.env.PUBLIC_URL
+  const home = "";
   const [inputValue, setInputValue] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [isTyping, setIsTyping] = useState(false); // Nuevo estado para controlar el indicador de escritura
@@ -71,7 +71,7 @@ const ChatApp = () => {
     const tokens = text
       .toLowerCase()
       .split(" ")
-      .map((word) => tokenizer[word] || tokenizer["<unk>"]); // Token desconocido
+      .map((word) => tokenizer[word] || tokenizer["unk"]); // Token desconocido
 
     while (tokens.length < maxLen) tokens.push(0); // Padding
     return tokens.slice(0, maxLen);
@@ -83,7 +83,7 @@ const ChatApp = () => {
     Object.keys(tokenizer).forEach((word) => {
       invertedTokenizer[tokenizer[word]] = word;
     });
-    return sequence.map((token) => invertedTokenizer[token] || "<unk>").join(" ");
+    return sequence.map((token) => invertedTokenizer[token] || "unk").join(" ");
   };
 
   // Función principal para generar la predicción
@@ -104,8 +104,8 @@ const ChatApp = () => {
     let stateC = encoderOutputs[1]; // Estado c
 
     // ----------------------- DECODER -----------------------
-    const startToken = tokenizerTarget["sos"] || 2; // Token de inicio
-    const endToken = tokenizerTarget["eos"] || 3; // Token de finalización
+    const startToken = tokenizerTarget["start"] || 2; // Token de inicio
+    const endToken = tokenizerTarget["end"] || 1; // Token de finalización
 
     let targetSeq = tf.tensor2d([[startToken]]); // Secuencia de entrada inicial al decoder
     let stopCondition = false;

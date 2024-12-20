@@ -280,3 +280,9 @@ for _ in range(10):
 # Convertirlo a javascript
 # tensorflowjs_converter --input_format keras model.h5 encoder_model/
 # tensorflowjs_converter --input_format keras model_lite.h5 encoder_model_lite/
+
+# tensorflowjs_converter --input_format keras model_lite.h5 encoder_model_lite/
+# tensorflowjs_converter --input_format keras decoder.h5 decoder/
+# tensorflowjs_converter --input_format keras encoder.h5 encoder/
+
+
