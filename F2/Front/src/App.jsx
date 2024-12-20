@@ -154,7 +154,7 @@ function App() {
               />
               
               <ConversationHeader.Content
-                info="Yo sólo puedo mostrarte la puerta..."
+                info="Yo sólo puedo mostrarte la puerta ...."
                 userName="Morfeo"
               />
               <ConversationHeader.Actions>
