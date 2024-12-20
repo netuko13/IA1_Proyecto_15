@@ -186,19 +186,13 @@ function App() {
               ¡Hola! Aquí algunos temas sobre los que me puedes preguntar:
               <ol>
                 <li>
-                  Curiosidades y datos interesantes: Cosas como "¿Por qué el cielo es azul?" o "¿Qué es la materia oscura?".
+                  Definiciones en ingles: Cosas como "what is charity?" o "what is ford".
                 </li>
                 <li>
-                  Consejos y recomendaciones: Desde recetas hasta qué series ver.
+                  Bot conversacional: por ejemplo "hello", what is your name?
                 </li>
                 <li>
-                  Ayuda práctica: Preguntas sobre cómo hacer algo específico, ya sea en tecnología, jardinería o cualquier otro tema.
-                </li>
-                <li>
-                  Creatividad: Ideas para proyectos, escritos, o inspiración en general.
-                </li>
-                <li>
-                  Chistes y entretenimiento: Si te quieres distraer o necesitas un buen chiste.
+                  Chistes y entretenimiento: Si te quieres distraer o necesitas un buen chiste. Ejemplo: tell me a joke
                 </li>
                 
 
