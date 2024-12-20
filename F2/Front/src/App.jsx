@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import DigitalRain from './components/DigitalRain';
 import {
   ChatContainer,
@@ -13,64 +13,96 @@ import "./themes/_chat_overrides.scss";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import * as tf from "@tensorflow/tfjs";
 
+import * as use from "@tensorflow-models/universal-sentence-encoder";
+import { ResponseGenerator } from "./content/ResponseGenerator"
+
 function App() {
-  const [messages, setMessages] = useState([
-    {
-      message: "Hola, ¿cómo puedo ayudarte hoy?",
-      sender: "Chatbot",
-      direction: "incoming"
-    },
-  ]);
+  const [dynamicIntents, setDynamicIntents] = useState([]);
+  const chatResponseGenerator = useRef(new ResponseGenerator());
+  const [messages, setMessages] = useState([ ]);
   
   const [model, setModel] = useState(null);
 
+  //Bajar hasta el ultimo mensaje
+  /*useEffect(() => {
+      if (chatBoxRef.current) {
+        chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+      }
+    }, [messages]);*/
+
   // Cargar el modelo al inicio
-  React.useEffect(() => {
+  useEffect(() => {
     const loadModel = async () => {
-      const loadedModel = await tf.loadLayersModel("./tfjs_model/model.json"); // Ruta al modelo
-      setModel(loadedModel);
+      try {
+        await tf.setBackend("webgl");
+        await tf.ready();
+        const loadedModel = await use.load();
+        setModel(loadedModel);
+        //setIsLoading(false);
+
+        // Add initial suggested questions
+        setMessages([
+          {
+            message: "Hola, A la izquierda hay temas que puedes preguntarme.",
+            sender: "Chatbot",
+            direction: "incoming"
+          },
+          
+
+        ]);
+      } catch (error) {
+        console.error("Error initializing TensorFlow.js:", error);
+        //setIsLoading(false);
+      }
     };
+
     loadModel();
   }, []);
 
-  const handleSendMessage = async (userMessage) => {
-    // Agregar el mensaje del usuario al chat
-    const newMessage = {
-      message: userMessage,
-      direction: "outgoing",
-    };
-    setMessages((prev) => [...prev, newMessage]);
+  const handleSendMessage = async (text) => {
+    //e.preventDefault();
+    if (!text.trim()) return;
 
-    if (model) {
-      // Convertir el mensaje en una entrada para el modelo
-      const inputTensor = preprocessMessage(userMessage);
+    const newUserMessage = { sender: "user", message: text,direction: "outgoing" };
+    setMessages((prevMessages) => [...prevMessages, newUserMessage]);
+    //setUserInput("");
+    //setIsGeneratingResponse(true);
 
-      // Realizar la predicción
-      const outputTensor = model.predict(inputTensor);
-      const botResponse = processModelOutput(outputTensor);
-
-      // Agregar la respuesta al chat
-      const responseMessage = {
-        message: botResponse,
-        direction: "incoming",
-      };
-      setMessages((prev) => [...prev, responseMessage]);
-    } else {
-      console.error("El modelo aún no está cargado.");
+    try {
+      if (model) {
+        const response = await generateResponse(text);
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "Chatbot", message: response,direction: "incoming" },
+        ]);
+      } else {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "Chatbot", message: "Model is still loading...",direction: "incoming"  },
+        ]);
+      }
+    } catch (error) {
+      console.error("Error generating response:", error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { role: "Chatbot", message: "Sorry, something went wrong.",direction: "incoming"  },
+      ]);
     }
   };
 
-  const preprocessMessage = (message) => {
-    // Convertir el mensaje en un tensor (ejemplo básico)
-    const inputArray = message.split("").map((char) => char.charCodeAt(0) / 255);
-    return tf.tensor2d([inputArray], [1, inputArray.length]);
+  const generateResponse = async (input) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return chatResponseGenerator.current.findBestMatch(input, dynamicIntents);
   };
 
-  const processModelOutput = (outputTensor) => {
-    // Convertir el tensor de salida a texto (ejemplo básico)
-    const outputArray = outputTensor.dataSync();
-    return `Respuesta del modelo: ${outputArray[0].toFixed(2)}`; // Ajusta según el modelo
+  const handleFeedback = (messageIndex, feedback) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg, idx) =>
+        idx === messageIndex ? { ...msg, feedback } : msg
+      )
+    );
   };
+
 
   // Función para manejar el envío de mensajes solo par pruebas
 /*  const handleSendMessage = (text) => {
